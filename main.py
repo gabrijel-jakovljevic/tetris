@@ -42,7 +42,6 @@ pygame.key.set_repeat(200, 50)
 
 # --------------------------------------- Glavna petlja ----------------------------------------------------------------
 while True:
-    print(speed)
     if game.progress_game:
         speed //= 1.25
         pygame.time.set_timer(GAME_UPDATE, int(speed))
