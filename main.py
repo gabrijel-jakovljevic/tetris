@@ -70,7 +70,7 @@ while True:
                 game.update_score(0, 1)
             if event.key == pygame.K_UP and not game.game_over:
                 game.fall()
-                game.update_score(0, 2)
+                game.update_score(0, 5)
             if event.key == pygame.K_x and not game.game_over:
                 game.rotate()
             if event.key == pygame.K_c and not game.game_over:
