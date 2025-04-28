@@ -12,12 +12,14 @@ class Game:
         self.game_over = False
         self.score = 0
         self.sum_cleared_rows = 0
+        self.progress_game = False
 
-    def progress_game(self):
+    def progress_game_state(self):
         if self.sum_cleared_rows >= 3:
             self.sum_cleared_rows %= 3
-            return True
-        return False
+            self.progress_game = True
+        else:
+            self.progress_game = False
 
     def update_score(self, lines_cleared, move_down_points):
         if lines_cleared == 1:
@@ -59,7 +61,7 @@ class Game:
         self.next_block = self.get_random_block()
         rows_cleared = self.grid.clear_full_rows()
         self.sum_cleared_rows += rows_cleared
-        self.progress_game()
+        self.progress_game_state()
         self.update_score(rows_cleared, 0)
         if not self.block_fits():
             self.game_over = True

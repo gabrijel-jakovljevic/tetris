@@ -43,9 +43,10 @@ pygame.key.set_repeat(200, 50)
 # --------------------------------------- Glavna petlja ----------------------------------------------------------------
 while True:
     print(speed)
-    if game.progress_game():
+    if game.progress_game:
         speed //= 1.25
         pygame.time.set_timer(GAME_UPDATE, int(speed))
+        game.progress_game = False
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             pygame.quit()
@@ -54,6 +55,7 @@ while True:
             if game.game_over:
                 game.game_over = False
                 game.reset()
+                speed = 500
                 break
         if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_SPACE:
