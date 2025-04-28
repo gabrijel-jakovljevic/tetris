@@ -59,8 +59,6 @@ while True:
         if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_SPACE and not game.game_over:
                 game.game_over = True
-                game.reset()
-                speed = 500
                 break
             if event.key == pygame.K_LEFT and not game.game_over:
                 game.move_left()
