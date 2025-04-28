@@ -14,6 +14,40 @@ class Game:
         self.sum_cleared_rows = 0
         self.progress_game = False
 
+    def lock_block(self):
+        tiles = self.current_block.get_cell_positions()
+        for position in tiles:
+            self.grid.grid[position.row][position.column] = self.current_block.id
+        self.current_block = self.next_block
+        self.next_block = self.get_random_block()
+        rows_cleared = self.grid.clear_full_rows()
+        self.sum_cleared_rows += rows_cleared
+        self.progress_game_state()
+        self.update_score(rows_cleared, 0)
+        if not self.block_fits():
+            self.game_over = True
+
+    def reset(self):
+        self.grid.reset()
+        self.blocks = [IBlock(), LBlock(), SBlock(), DBlock()]
+        self.current_block = self.get_random_block()
+        self.next_block = self.get_random_block()
+        self.score = 0
+
+    def block_fits(self):
+        tiles = self.current_block.get_cell_positions()
+        for tile in tiles:
+            if not self.grid.is_empty(tile.row, tile.column):
+                return False
+        return True
+
+    def block_inside(self):
+        tiles = self.current_block.get_cell_positions()
+        for tile in tiles:
+            if not self.grid.is_inside(tile.row, tile.column):
+                return False
+        return True
+
     def progress_game_state(self):
         if self.sum_cleared_rows >= 3:
             self.sum_cleared_rows %= 3
@@ -53,33 +87,6 @@ class Game:
             self.current_block.move(-1, 0)
             self.lock_block()
 
-    def lock_block(self):
-        tiles = self.current_block.get_cell_positions()
-        for position in tiles:
-            self.grid.grid[position.row][position.column] = self.current_block.id
-        self.current_block = self.next_block
-        self.next_block = self.get_random_block()
-        rows_cleared = self.grid.clear_full_rows()
-        self.sum_cleared_rows += rows_cleared
-        self.progress_game_state()
-        self.update_score(rows_cleared, 0)
-        if not self.block_fits():
-            self.game_over = True
-
-    def reset(self):
-        self.grid.reset()
-        self.blocks = [IBlock(), LBlock(), SBlock(), DBlock()]
-        self.current_block = self.get_random_block()
-        self.next_block = self.get_random_block()
-        self.score = 0
-
-    def block_fits(self):
-        tiles = self.current_block.get_cell_positions()
-        for tile in tiles:
-            if not self.grid.is_empty(tile.row, tile.column):
-                return False
-        return True
-
     def rotate(self):
         self.current_block.rotate()
         if not self.block_inside() or not self.block_fits():
@@ -97,13 +104,6 @@ class Game:
             self.current_block.move(1, 0)
         self.current_block.move(-1, 0)
         self.lock_block()
-
-    def block_inside(self):
-        tiles = self.current_block.get_cell_positions()
-        for tile in tiles:
-            if not self.grid.is_inside(tile.row, tile.column):
-                return False
-        return True
 
     def draw(self, screen):
         self.grid.draw(screen)

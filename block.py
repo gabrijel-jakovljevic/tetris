@@ -17,14 +17,6 @@ class Block:
         self.row_offset += rows
         self.column_offset += columns
 
-    def get_cell_positions(self):
-        tiles = self.cells[self.state]
-        moved_tiles = []
-        for position in tiles:
-            position = Position(position.row + self.row_offset, position.column + self.column_offset)
-            moved_tiles.append(position)
-        return moved_tiles
-
     def rotate(self):
         self.state = (self.state + 2) % 8
 
@@ -34,6 +26,14 @@ class Block:
         else:
             self.state -= 1
         self.state %= 8
+
+    def get_cell_positions(self):
+        tiles = self.cells[self.state]
+        moved_tiles = []
+        for position in tiles:
+            position = Position(position.row + self.row_offset, position.column + self.column_offset)
+            moved_tiles.append(position)
+        return moved_tiles
 
     def draw(self, screen, offset_x, offset_y):
         tiles = self.get_cell_positions()
